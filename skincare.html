@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>护肤排班表</title>
+<style>
+  :root{
+    --paper:#FAF8F3; --card:#FFFFFF; --ink:#24211B; --mut:#8C8474;
+    --line:#E3DCCE; --tan:#C9BFAE; --fill:#F3EFE6;
+    --va:#A65E1E; --acid:#3E6B4F; --rest:#56779A; --mask:#B8323F;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
+    font-size:15px; line-height:1.55; padding:20px 14px 48px;
+  }
+  .wrap{max-width:560px;margin:0 auto;}
+
+  /* ---------- header ---------- */
+  .eyebrow{
+    font-size:11px;letter-spacing:.22em;color:var(--mut);
+    text-transform:uppercase;margin-bottom:6px;
+  }
+  h1{font-size:26px;font-weight:700;letter-spacing:.02em;}
+  .sub{color:var(--mut);font-size:13px;margin-top:4px;}
+  header{padding:4px 2px 18px;border-bottom:2px solid var(--ink);margin-bottom:18px;}
+
+  /* ---------- section label ---------- */
+  .sec{
+    display:flex;align-items:baseline;gap:8px;
+    margin:26px 2px 10px;
+  }
+  .sec b{font-size:17px;font-weight:700;}
+  .sec span{font-size:11px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase;}
+
+  /* ---------- cards ---------- */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 14px 12px;margin-bottom:10px;
+  }
+  .card.today{border:2px solid var(--ink);box-shadow:0 2px 0 var(--tan);}
+
+  .rowhead{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
+  .day{font-weight:700;font-size:16px;}
+  .tag{
+    font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;
+    color:#fff;letter-spacing:.05em;
+  }
+  .tag.va{background:var(--va);} .tag.acid{background:var(--acid);}
+  .tag.rest{background:var(--rest);} .tag.mask{background:var(--mask);}
+  .chip{
+    display:none;font-size:11px;font-weight:700;letter-spacing:.08em;
+    border:1.5px solid var(--ink);border-radius:999px;padding:1px 8px;margin-left:auto;
+  }
+  .today .chip{display:inline-block;}
+
+  /* ---------- step chain ---------- */
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:5px 4px;}
+  .step{
+    background:var(--fill);border-radius:999px;padding:3px 10px;
+    font-size:13.5px;white-space:nowrap;
+  }
+  .step.wait{background:none;border:1.5px dashed var(--tan);color:var(--mut);}
+  .step.key{background:var(--ink);color:#fff;}
+  .step small{display:block;font-size:10px;font-weight:400;letter-spacing:.02em;opacity:.62;line-height:1.3;margin-top:1px;}
+  .step.key small{opacity:.78;}
+  .arw{color:var(--tan);font-size:12px;}
+  .note{font-size:12.5px;color:var(--mut);margin-top:8px;}
+
+  /* ---------- rules / queue ---------- */
+  ul.rules{list-style:none;}
+  ul.rules li{
+    padding:7px 0 7px 18px;position:relative;font-size:14px;
+    border-bottom:1px dashed var(--line);
+  }
+  ul.rules li:last-child{border-bottom:none;}
+  ul.rules li::before{
+    content:"◆";position:absolute;left:0;top:8px;font-size:9px;color:var(--tan);
+  }
+  table.q{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.q td{padding:7px 4px;border-bottom:1px dashed var(--line);vertical-align:top;}
+  table.q tr:last-child td{border-bottom:none;}
+  table.q td:first-child{font-weight:600;white-space:nowrap;width:88px;}
+  table.q td:last-child{color:#4A463D;}
+
+  footer{margin-top:26px;text-align:center;color:var(--mut);font-size:12px;letter-spacing:.06em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Weekly Skincare Regimen</div>
+    <h1>护肤排班表</h1>
+    <div class="sub">油皮 · 匀肤色 / 缩毛孔 / 祛油光 · 照做即可,不用动脑</div>
+  </header>
+
+  <!-- ============ AM ============ -->
+  <div class="sec"><b>早上</b><span>every morning · 每天固定</span></div>
+  <div class="card">
+    <div class="chain">
+      <span class="step">CeraVe绿盖洁面 / 清水</span><span class="arw">→</span>
+      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
+      <span class="step">烟酰胺<small>Niacinamide 10% + Zinc 1%</small></span><span class="arw">→</span>
+      <span class="step">CeraVe控油凝露</span><span class="arw">→</span>
+      <span class="step key">Biore防晒</span>
+    </div>
+    <div class="note">防晒是全套的胜负手,出门必涂;整天宅家/阴天可用CeraVe SPF30那支顶替。</div>
+  </div>
+
+  <!-- ============ PM ============ -->
+  <div class="sec"><b>晚上</b><span>by weekday · 按周轮换</span></div>
+
+  <div class="card" id="mon">
+    <div class="rowhead"><span class="day">周一</span><span class="tag va">维A夜</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step wait">擦干等10分钟</span><span class="arw">→</span>
+      <span class="step key">视黄醛棉片</span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+    <div class="note">棉片用完后,这一步换成 TO A醇(Retinol 1% in Squalane)3–4滴。</div>
+  </div>
+
+  <div class="card" id="tue">
+    <div class="rowhead"><span class="day">周二</span><span class="tag rest">泥膜 · 休息</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step key">可复美泥膜 10–15分钟洗掉</span><span class="arw">→</span>
+      <span class="step">茶树水</span><span class="arw">→</span>
+      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+  </div>
+
+  <div class="card" id="wed">
+    <div class="rowhead"><span class="day">周三</span><span class="tag acid">果酸夜</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step key">果酸水<small>Glycolic Acid 7% Toner</small></span><span class="arw">→</span>
+      <span class="step wait">等5分钟</span><span class="arw">→</span>
+      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+  </div>
+
+  <div class="card" id="thu">
+    <div class="rowhead"><span class="day">周四</span><span class="tag va">维A夜</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step wait">擦干等10分钟</span><span class="arw">→</span>
+      <span class="step key">视黄醛棉片</span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+    <div class="note">棉片用完后,这一步换成 TO A醇(Retinol 1% in Squalane)3–4滴。</div>
+  </div>
+
+  <div class="card" id="fri">
+    <div class="rowhead"><span class="day">周五</span><span class="tag rest">休息夜</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step">茶树水</span><span class="arw">→</span>
+      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+  </div>
+
+  <div class="card" id="sat">
+    <div class="rowhead"><span class="day">周六</span><span class="tag acid">果酸夜</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step key">果酸水<small>Glycolic Acid 7% Toner</small></span><span class="arw">→</span>
+      <span class="step wait">等5分钟</span><span class="arw">→</span>
+      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+  </div>
+
+  <div class="card" id="sun">
+    <div class="rowhead"><span class="day">周日</span><span class="tag mask">面膜 · 休息</span><span class="chip">今晚</span></div>
+    <div class="chain">
+      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
+      <span class="step key">SK-II面膜 15分钟</span><span class="arw">→</span>
+      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
+      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
+    </div>
+  </div>
+
+  <!-- ============ rules ============ -->
+  <div class="sec"><b>铁律</b><span>rules · 别破例</span></div>
+  <div class="card">
+    <ul class="rules">
+      <li>一晚只上一种猛药:维A和果酸永不同晚,<b>棉片=维A类</b>,和A醇也不能同晚。</li>
+      <li>茶树水只排在休息/泥膜夜,不跟酸、维A叠加。</li>
+      <li>爆皮泛红:当晚停猛药,<b>理肤泉B5厚涂</b>,恢复了再回到课表。头2–4周轻微爆痘脱皮是维A正常反应,不用慌。</li>
+      <li>Bio-Oil只擦身体旧疤和肘膝,<b>不上脸</b>(油痘皮容易闷痘)。</li>
+    </ul>
+  </div>
+
+  <!-- ============ queue ============ -->
+  <div class="sec"><b>库存消耗</b><span>queue · 先用谁</span></div>
+  <div class="card">
+    <table class="q">
+      <tr><td>维A类</td><td>先用完视黄醛棉片(开封易干)→ 再开TO A醇(Retinol 1% in Squalane),开封后6个月内用完</td></tr>
+      <tr><td>泥膜</td><td>可复美10个 → Fan Beauty 2桶,每周二1个,约3个月清完</td></tr>
+      <tr><td>SK-II</td><td>9片,每周日1片,约2个月清完</td></tr>
+      <tr><td>洁面</td><td>早CeraVe绿盖 / 晚Anua,两支同时消耗</td></tr>
+      <tr><td>防晒</td><td>出门Biore;CeraVe SPF30降级为宅家阴天用</td></tr>
+      <tr><td>寿命</td><td>熊果苷约2个月 · 烟酰胺2–3个月 · 米脂乳3–4个月 · 果酸水最耐用,能撑大半年</td></tr>
+    </table>
+  </div>
+
+  <footer>两周后看皮肤反应 · 稳定的话维A加到一周3次</footer>
+</div>
+
+<script>
+  (function(){
+    var map={1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat',0:'sun'};
+    var el=document.getElementById(map[new Date().getDay()]);
+    if(el){el.classList.add('today');}
+  })();
+</script>
+</body>
+</html>
