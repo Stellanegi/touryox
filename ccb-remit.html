@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>建行手机银行 · 汇加拿大操作卡</title>
+
+<script>
+/* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+   ★  只需要改下面 6 行引号里的内容，其他都不用动  ★
+   ★  改完保存，页面上的红色提醒条会自动消失        ★
+   ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
+const INFO = {
+  "收款人英文姓名": "【待填】和加拿大银行开户名完全一致，如 LINGZI ZHANG",
+  "收款人账号":     "【待填】按你银行官网“接收国际电汇/Incoming wire”页面给的格式填",
+  "收款人英文地址": "【待填】如 123 Main St, Markham, ON L3R 0A1, Canada",
+  "SWIFT代码":      "【待填】如 ROYCCAT2",
+  "收款银行英文名": "【待填】如 ROYAL BANK OF CANADA",
+  "妈妈的英文地址": "【待填】妈妈住址的拼音，具体到门牌号，如 Room 502, Unit 3, 88 Xihu Road, Hangzhou, Zhejiang, China"
+};
+</script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 20px;
+    line-height: 1.75;
+    color: #26241F;
+    background: #F7F5F0;
+    padding: 20px 16px 60px;
+  }
+
+  .card { max-width: 660px; margin: 0 auto; }
+
+  /* ── 标题 ── */
+  .head { text-align: center; padding: 8px 0 20px; }
+  .head .bank {
+    display: inline-block;
+    color: #0066B3;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 2px;
+    border: 2px solid #0066B3;
+    border-radius: 6px;
+    padding: 2px 12px;
+    margin-bottom: 10px;
+  }
+  .head h1 { font-size: 30px; font-weight: 800; letter-spacing: 1px; }
+  .head .sub { font-size: 18px; color: #6B675E; margin-top: 6px; }
+
+  /* ── 待填提醒（填完自动消失，妈妈看不到）── */
+  .todo-banner {
+    display: none;
+    background: #C0392B;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  .todo-banner.show { display: block; }
+
+  /* ── 通用信息框 ── */
+  .box {
+    background: #fff;
+    border: 1.5px solid #E2DDD2;
+    border-radius: 14px;
+    padding: 18px 18px;
+    margin-bottom: 22px;
+  }
+  .box-title { font-weight: 800; font-size: 21px; margin-bottom: 8px; }
+
+  /* ── 大步骤标题 ── */
+  .phase {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 30px 0 14px;
+  }
+  .phase .badge {
+    flex: none;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: #0066B3;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .phase h2 { font-size: 26px; font-weight: 800; }
+  .phase .note { font-size: 17px; color: #6B675E; font-weight: 400; }
+
+  /* ── 小步骤 ── */
+  ol.steps { list-style: none; counter-reset: step; }
+  ol.steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 18px 44px;
+  }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 2px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid #26241F;
+    font-size: 17px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff;
+  }
+
+  /* App 里的按钮：卡片上长这样，App 里就找一样的字 */
+  .btn-pill {
+    display: inline-block;
+    background: #0066B3;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 8px;
+    padding: 1px 12px;
+    margin: 0 2px;
+    white-space: nowrap;
+  }
+  .warn { color: #C0392B; font-weight: 800; }
+
+  /* ── 抄写区：一行 = App 里的一个格子 ── */
+  .field {
+    background: #fff;
+    border: 1.5px solid #B9D4EC;
+    border-radius: 12px;
+    padding: 14px 14px 12px;
+    margin: 0 0 14px;
+  }
+  .field .label { font-size: 17px; color: #4A6E92; font-weight: 700; margin-bottom: 6px; }
+  .field .row { display: flex; gap: 10px; align-items: stretch; }
+  .field .value {
+    flex: 1;
+    background: #EDF4FB;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 19px;
+    font-weight: 600;
+    word-break: break-all;
+    font-variant-numeric: tabular-nums;
+  }
+  .copy-btn {
+    flex: none;
+    min-width: 76px;
+    border: none;
+    border-radius: 8px;
+    background: #0066B3;
+    color: #fff;
+    font-size: 19px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0 10px;
+  }
+  .copy-btn:active { transform: scale(0.97); }
+  .copy-btn.ok { background: #2E7D32; }
+
+  /* ── 提示框 ── */
+  .tips { background: #FDF6E7; border-color: #EAD9A8; }
+  .tips ul { list-style: none; }
+  .tips li { padding: 4px 0 4px 26px; position: relative; font-size: 18px; }
+  .tips li::before { content: "•"; position: absolute; left: 8px; color: #B8860B; font-weight: 800; }
+
+  .done { background: #EEF6EE; border-color: #BFDCBF; }
+
+  /* ── 给女儿用的区域 ── */
+  .for-daughter {
+    border: 2px dashed #C9C2B2;
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 36px;
+    font-size: 17px;
+    color: #6B675E;
+  }
+  .for-daughter .copy-btn { margin-top: 10px; width: 100%; padding: 12px 0; }
+
+  .footer { text-align: center; color: #9A948A; font-size: 16px; margin-top: 30px; }
+
+  @media (max-width: 420px) {
+    body { font-size: 19px; }
+    .field .row { flex-direction: column; }
+    .copy-btn { padding: 12px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="head">
+    <div class="bank">中国建设银行 手机银行</div>
+    <h1>给加拿大汇款 · 操作卡</h1>
+    <div class="sub">照着一步一步点就行，全程约 15 分钟</div>
+  </div>
+
+  <div class="todo-banner" id="todoBanner">
+    ⚠ 还有信息没填：请打开这个文件，把最上面 6 行【待填】的内容改成真实信息，再发给妈妈。
+  </div>
+
+  <div class="box">
+    <div class="box-title">妈妈，开始前先看这里 👇</div>
+    ① 手边放好<b>建行卡</b>和<b>身份证</b>；<br>
+    ② 下面<span class="btn-pill">蓝底白字</span>的，就是要在手机上找到并点的按钮；<br>
+    ③ 蓝色框里的英文和数字<b>都不用打字</b>，点旁边的「复制」，回到建行App在格子里<b>长按 → 点“粘贴”</b>就行；<br>
+    ④ 最好和我开着微信视频，一边视频一边弄，不着急。
+  </div>
+
+  <div class="phase">
+    <div class="badge">一</div>
+    <div><h2>先换钱（购汇）</h2><div class="note">把人民币换成加拿大元</div></div>
+  </div>
+
+  <ol class="steps">
+    <li>打开<span class="btn-pill">中国建设银行</span>App，登录。</li>
+    <li>点最上面的搜索框，输入<b>「结售汇」</b>三个字，点搜索结果里的<span class="btn-pill">结售汇</span>。<br>（找不到搜索框的话：点底部<span class="btn-pill">投资理财</span>→<span class="btn-pill">结售汇</span>→<span class="btn-pill">人民币结售汇</span>）</li>
+    <li>如果出现一页《风险提示》：勾选「已阅读」，等它倒数完，点<span class="btn-pill">下一步</span>。</li>
+    <li>选要扣钱的那张建行卡。</li>
+    <li>购汇币种选<span class="btn-pill">加拿大元</span>；钞汇选<span class="btn-pill">现汇</span>。<span class="warn">一定选「现汇」，不要选「现钞」！</span></li>
+    <li>输入要换的<b>加元金额</b>（我们提前商量好的数字）。</li>
+    <li>资金用途：如实选<b>「赡家款」</b>（给国外的女儿生活费）。列表里没有这项，就选最接近的「其他」并如实填写。</li>
+    <li>预计用汇时间选<b>本月</b>，勾选承诺，点<span class="btn-pill">下一步</span>，核对没问题就<span class="btn-pill">确认</span>。换钱完成✅</li>
+  </ol>
+
+  <div class="phase">
+    <div class="badge">二</div>
+    <div><h2>把钱汇出去</h2><div class="note">汇到我在加拿大的账户</div></div>
+  </div>
+
+  <ol class="steps">
+    <li>回到App首页，点<span class="btn-pill">转账汇款</span>→<span class="btn-pill">境外汇款</span>→<span class="btn-pill">外汇汇款</span>。<br>（找不到就在顶部搜索框输入<b>「境外汇款」</b>）</li>
+    <li>汇款账户：选刚才换好加元的那张卡；币种选<span class="btn-pill">加拿大元</span>；金额填刚换的加元数字。</li>
+    <li>下面这几个格子，逐个「复制 → 粘贴」👇</li>
+  </ol>
+
+  <div class="field">
+    <div class="label">App 格子【收款人姓名】→ 粘贴这个</div>
+    <div class="row"><div class="value" id="f1" data-k="收款人英文姓名"></div><button class="copy-btn" onclick="copyText('f1',this)">复制</button></div>
+  </div>
+
+  <div class="field">
+    <div class="label">App 格子【收款人账号】→ 粘贴这个</div>
+    <div class="row"><div class="value" id="f2" data-k="收款人账号"></div><button class="copy-btn" onclick="copyText('f2',this)">复制</button></div>
+  </div>
+
+  <div class="field">
+    <div class="label">App 格子【收款人地址】→ 粘贴这个</div>
+    <div class="row"><div class="value" id="f3" data-k="收款人英文地址"></div><button class="copy-btn" onclick="copyText('f3',this)">复制</button></div>
+  </div>
+
+  <div class="field">
+    <div class="label">App 格子【收款银行代码】→ 类型选 SWIFT，粘贴这个</div>
+    <div class="row"><div class="value" id="f4" data-k="SWIFT代码"></div><button class="copy-btn" onclick="copyText('f4',this)">复制</button></div>
+    <div style="font-size:16px;color:#6B675E;margin-top:6px;">粘贴后银行名会自动跳出来，看看是不是：<b id="bankName" data-k="收款银行英文名"></b>，是就对了。</div>
+  </div>
+
+  <div class="field">
+    <div class="label">App 格子【汇款人地址】（填妈妈自己的）→ 粘贴这个</div>
+    <div class="row"><div class="value" id="f5" data-k="妈妈的英文地址"></div><button class="copy-btn" onclick="copyText('f5',this)">复制</button></div>
+  </div>
+
+  <ol class="steps" start="4" style="counter-reset: step 3;">
+    <li>汇款用途选<b>「赡家款」</b>；费用承担方式选<b>「共同承担（SHA）」</b>。</li>
+    <li>点<span class="btn-pill">下一步</span>，<span class="warn">仔细核对姓名和账号</span>，输入手机短信验证码，点<span class="btn-pill">确认</span>。</li>
+  </ol>
+
+  <div class="box done">
+    <div class="box-title">✅ 这样就完成啦</div>
+    钱一般 <b>2–3 个工作日</b>到我账上，到账我马上告诉你。银行会另外扣一点手续费（大约一两百元人民币），加拿大这边银行也会收十几加元，所以我收到的比汇出的略少一点，<b>是正常的</b>。
+  </div>
+
+  <div class="box tips">
+    <div class="box-title">💡 遇到问题不要慌</div>
+    <ul>
+      <li>找不到按钮：App 更新后位置可能变，在顶部搜索框直接输入「结售汇」或「境外汇款」就能找到。</li>
+      <li>提示限额或要去柜台：不用急，先停下来给我打视频，我们一起看。</li>
+      <li>建行客服电话：<b>95533</b>，可以直接问。</li>
+      <li>每人每年最多换等值 5 万美元的外汇，我们汇的金额远不到，放心。</li>
+    </ul>
+  </div>
+
+  <div class="for-daughter">
+    <b>🔧 这一块给女儿用（妈妈不用看）</b><br>
+    ① 打开本文件，把最顶上 6 行【待填】改成真实信息；<br>
+    ② 如果妈妈打不开这个网页，点下面按钮，把所有信息复制成一段文字，直接发微信给她，她长按消息 → 复制即可。
+    <button class="copy-btn" onclick="copyWechat(this)">一键复制「微信版」全部信息</button>
+  </div>
+
+  <div class="footer">建行手机银行汇款操作卡 · 保存好这一页</div>
+</div>
+
+<script>
+  // 把 INFO 填进页面
+  document.querySelectorAll("[data-k]").forEach(el => {
+    el.textContent = INFO[el.dataset.k] || "";
+  });
+
+  // 还有【待填】就显示红色提醒条（填完自动消失）
+  if (Object.values(INFO).some(v => v.includes("待填"))) {
+    document.getElementById("todoBanner").classList.add("show");
+  }
+
+  function fallbackCopy(text, done) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand("copy"); done(); }
+    catch (e) { alert("复制没成功，请长按文字手动复制"); }
+    document.body.removeChild(ta);
+  }
+
+  function flash(btn) {
+    const old = btn.textContent;
+    btn.textContent = "已复制 ✓";
+    btn.classList.add("ok");
+    setTimeout(() => { btn.textContent = old; btn.classList.remove("ok"); }, 2000);
+  }
+
+  function copyText(id, btn) {
+    const text = document.getElementById(id).textContent.trim();
+    const done = () => flash(btn);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+
+  function copyWechat(btn) {
+    const t =
+      "【建行汇款要用的信息，长按这条消息可复制】\n" +
+      "收款人姓名：" + INFO["收款人英文姓名"] + "\n" +
+      "收款人账号：" + INFO["收款人账号"] + "\n" +
+      "收款人地址：" + INFO["收款人英文地址"] + "\n" +
+      "SWIFT代码：" + INFO["SWIFT代码"] + "\n" +
+      "收款银行：" + INFO["收款银行英文名"] + "\n" +
+      "汇款人地址（妈妈的）：" + INFO["妈妈的英文地址"] + "\n" +
+      "汇款用途选：赡家款";
+    const done = () => flash(btn);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(t).then(done).catch(() => fallbackCopy(t, done));
+    } else {
+      fallbackCopy(t, done);
+    }
+  }
+</script>
+</body>
+</html>
