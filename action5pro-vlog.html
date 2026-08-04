@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1116">
+<title>Action 5 Pro · Vlog 速查</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E1116;
+  --surface:#171C23;
+  --surface-2:#1E252E;
+  --line:#2A323C;
+  --ink:#E6EAF0;
+  --ink-dim:#8C97A5;
+  --ink-faint:#5C6672;
+  --rec:#FF4D3D;
+  --data:#5EC8D8;
+  --warn:#F2B544;
+  --mono:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --cjk:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--cjk);
+  font-size:15px;
+  line-height:1.65;
+  padding:0 18px calc(56px + env(safe-area-inset-bottom));
+  max-width:640px;
+  margin:0 auto;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---- OSD header ---- */
+.osd{
+  position:sticky;top:0;z-index:20;
+  background:rgba(14,17,22,.92);
+  backdrop-filter:blur(12px);
+  margin:0 -18px;padding:14px 18px 12px;
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px;
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--rec);flex:none;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,55%{opacity:1}75%{opacity:.25}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+.osd-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-dim);text-transform:uppercase}
+.osd-title b{color:var(--ink);font-weight:500}
+.osd-right{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.08em}
+
+/* ---- intro ---- */
+.lede{padding:26px 0 8px}
+h1{font-family:var(--mono);font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+h1 span{display:block;font-family:var(--cjk);font-size:15px;font-weight:400;color:var(--ink-dim);letter-spacing:0;margin-top:8px}
+
+/* ---- section label ---- */
+.sec{margin:38px 0 14px;display:flex;align-items:baseline;gap:12px}
+.sec h2{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--data);text-transform:uppercase;flex:none}
+.sec i{height:1px;background:var(--line);flex:1;display:block}
+.sec em{font-style:normal;font-size:12px;color:var(--ink-faint);flex:none}
+
+/* ---- scenario card ---- */
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:16px 16px 15px;
+  margin-bottom:12px;
+}
+.card.pin{border-color:rgba(255,77,61,.4)}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-faint);display:flex;align-items:center;gap:8px;margin-bottom:5px;
+}
+.eyebrow s{text-decoration:none;color:var(--rec);font-weight:700}
+.card h3{font-size:16px;font-weight:600;letter-spacing:.01em;margin-bottom:12px}
+
+/* ---- SIGNATURE: parameter strip ---- */
+.strip{
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding:9px 10px;margin:0 -4px 12px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:6px;
+  position:relative;
+}
+.strip::before,.strip::after{
+  content:"";position:absolute;width:7px;height:7px;
+  border:1px solid var(--data);opacity:.55;
+}
+.strip::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.strip::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.chip{
+  font-family:var(--mono);font-size:12px;font-weight:500;
+  color:var(--data);background:rgba(94,200,216,.09);
+  border:1px solid rgba(94,200,216,.22);
+  border-radius:4px;padding:3px 8px;white-space:nowrap;
+}
+.chip.cjk{font-family:var(--cjk);font-size:12.5px}
+.chip.off{color:var(--ink-faint);background:transparent;border-color:var(--line)}
+.why{font-size:13.5px;color:var(--ink-dim);line-height:1.6}
+.why b{color:var(--ink);font-weight:500}
+
+/* ---- setup list ---- */
+.setup{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.row{display:flex;gap:13px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row-k{font-family:var(--mono);font-size:11px;color:var(--data);letter-spacing:.06em;flex:none;width:52px;padding-top:3px}
+.row-v{font-size:14px;line-height:1.55}
+.row-v small{display:block;font-size:12.5px;color:var(--ink-dim);margin-top:3px;font-family:var(--mono);letter-spacing:.01em}
+.row-v small.cjk{font-family:var(--cjk);letter-spacing:0}
+
+/* ---- limits ---- */
+.limit{
+  background:rgba(242,181,68,.06);
+  border:1px solid rgba(242,181,68,.24);
+  border-radius:10px;padding:15px 16px;
+}
+.limit h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--warn);text-transform:uppercase;margin-bottom:10px}
+.limit dl{display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:13.5px}
+.limit dt{color:var(--ink);white-space:nowrap}
+.limit dd{color:var(--ink-dim);font-family:var(--mono);font-size:12.5px;line-height:1.5}
+
+/* ---- tips ---- */
+.tip{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.tip:last-child{border-bottom:0}
+.tip-n{font-family:var(--mono);font-size:11px;color:var(--ink-faint);flex:none;padding-top:4px;width:16px}
+.tip-b{font-size:14px;line-height:1.6}
+.tip-b b{font-weight:600}
+.tip-b span{display:block;color:var(--ink-dim);font-size:13px;margin-top:2px}
+
+/* ---- checklist ---- */
+.check{background:var(--surface-2);border-radius:10px;padding:6px 16px}
+.check label{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:14px}
+.check label:last-child{border-bottom:0}
+.check input{appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:none;margin-top:3px;border:1.5px solid var(--ink-faint);border-radius:4px;background:transparent;position:relative}
+.check input:checked{border-color:var(--rec);background:var(--rec)}
+.check input:checked::after{content:"";position:absolute;left:5px;top:1.5px;width:4px;height:8px;border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(42deg)}
+.check input:focus-visible{outline:2px solid var(--data);outline-offset:2px}
+.check input:checked + span{color:var(--ink-faint);text-decoration:line-through}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);letter-spacing:.08em;line-height:1.9}
+</style>
+</head>
+<body>
+
+<div class="osd">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="osd-title"><b>OSMO ACTION 5 PRO</b> · VLOG</span>
+  <span class="osd-right">47GB · 4H</span>
+</div>
+
+<div class="lede">
+  <h1>Vlog 速查<span>五个场景,照着参数条抄。其余的别动。</span></h1>
+</div>
+
+<div class="sec"><h2>场景</h2><i></i><em>照抄参数条</em></div>
+
+<div class="card pin">
+  <div class="eyebrow"><s>●</s> 手持 · 充电手柄</div>
+  <h3>走路说话 · 日常自拍</h3>
+  <div class="strip">
+    <span class="chip">4K 16:9</span><span class="chip">30fps</span>
+    <span class="chip cjk">超强增稳</span><span class="chip cjk">标准视角</span>
+  </div>
+  <p class="why"><b>视角一定要切「标准」。</b>超广角在自拍这个距离会把脸拉宽、下巴拉长,是很多人觉得"我怎么这么丑"的真正原因,不是你的问题。</p>
+</div>
+
+<div class="card">
+  <div class="eyebrow">挂脖 · 第一视角</div>
+  <h3>逛街 · 做饭 · 边走边拍</h3>
+  <div class="strip">
+    <span class="chip">2.7K 16:9</span><span class="chip">30fps</span>
+    <span class="chip cjk">地平线增稳</span><span class="chip cjk">广角</span>
+  </div>
+  <p class="why">挂脖走路身体会左右晃,画面跟着歪。<b>地平线增稳能把水平线锁死</b>,效果比 4K 更值。它只在 2.7K/1080p 下能开,所以这里主动放弃 4K。</p>
+</div>
+
+<div class="card">
+  <div class="eyebrow">桌面 · 折叠脚架</div>
+  <h3>坐着说话 · 固定机位</h3>
+  <div class="strip">
+    <span class="chip">4K 16:9</span><span class="chip">30fps</span>
+    <span class="chip off cjk">增稳关闭</span><span class="chip cjk">标准视角</span>
+  </div>
+  <p class="why">相机不动就别开增稳 —— 增稳是靠裁边实现的,<b>关掉能拿回完整视野和画质</b>。镜头放在略高于视线的位置,俯一点点角度最好看。</p>
+</div>
+
+<div class="card">
+  <div class="eyebrow">竖屏 · 小红书 / 抖音</div>
+  <h3>竖着拍 · 直接发</h3>
+  <div class="strip">
+    <span class="chip">9:16 竖拍</span><span class="chip">30fps</span>
+    <span class="chip cjk">超强增稳</span><span class="chip cjk">标准视角</span>
+  </div>
+  <p class="why"><b>竖拍不支持人物跟随。</b>想要跟随就横着拍再后期裁,或者接受竖拍的固定构图 —— 日常 vlog 其实不太需要跟随。</p>
+</div>
+
+<div class="card">
+  <div class="eyebrow">暗光 · 晚上 / 室内</div>
+  <h3>夜街 · 灯下 · 餐厅</h3>
+  <div class="strip">
+    <span class="chip">4K 16:9</span><span class="chip">24–30fps</span>
+    <span class="chip cjk">超强增稳</span><span class="chip cjk">标准视角</span>
+  </div>
+  <p class="why"><b>帧率越低,进光越多。</b>暗光下千万别上 60fps,画面会又暗又噪。慢下来、走稳一点,比开什么模式都管用。</p>
+</div>
+
+<div class="sec"><h2>设一次就不用再管</h2><i></i></div>
+
+<div class="setup">
+  <div class="row"><span class="row-k">视角</span><span class="row-v">切成「标准」去鱼眼<small>录制界面右上角 RS|Wide 图标</small></span></div>
+  <div class="row"><span class="row-k">语音</span><span class="row-v">打开语音控制,解放双手<small>下拉菜单 › 系统设置 › 语音控制</small></span></div>
+  <div class="row"><span class="row-k">预录</span><span class="row-v">打开,补回按下之前的几秒<small class="cjk">"啊刚才那个没录到"从此少一半</small></span></div>
+  <div class="row"><span class="row-k">风噪</span><span class="row-v">风噪消除常开<small class="cjk">室外声音的最低保障,不开等于白拍</small></span></div>
+  <div class="row"><span class="row-k">色彩</span><span class="row-v">用「普通」,不要 D-Log M<small class="cjk">除非你打算逐条调色,否则只会变灰</small></span></div>
+  <div class="row"><span class="row-k">存储</span><span class="row-v">插一张 microSD<small class="cjk">机内 47GB,4K 拍不到一小时就满</small></span></div>
+</div>
+
+<div class="sec"><h2>为什么选项是灰的</h2><i></i></div>
+
+<div class="limit">
+  <h4>增稳的硬性限制</h4>
+  <dl>
+    <dt>地平线增稳</dt><dd>仅 1080p / 2.7K(16:9),≤60fps</dd>
+    <dt>地平校正</dt><dd>仅 1080p / 2.7K / 4K(16:9),≤60fps</dd>
+    <dt>超强增稳</dt><dd>最高支持到 4K/120fps</dd>
+    <dt>延时 · 慢动作</dt><dd>增稳一律不可用</dd>
+    <dt>竖拍</dt><dd>不支持人物跟随</dd>
+  </dl>
+</div>
+
+<div class="sec"><h2>拍的时候</h2><i></i><em>比参数更管用</em></div>
+
+<div>
+  <div class="tip"><span class="tip-n">01</span><span class="tip-b"><b>每段前后各留三秒</b><span>开录先别说话,说完也别急着停。剪辑的时候你会谢谢自己。</span></span></div>
+  <div class="tip"><span class="tip-n">02</span><span class="tip-b"><b>看镜头,别看前屏</b><span>盯着自己的脸,眼神就会飘。前屏只用来确认自己在画面里,确认完就移开。</span></span></div>
+  <div class="tip"><span class="tip-n">03</span><span class="tip-b"><b>举到略高于眼睛,微微俯拍</b><span>手臂微屈,别伸直。这个角度对每个人都友好。</span></span></div>
+  <div class="tip"><span class="tip-n">04</span><span class="tip-b"><b>走路时膝盖当避震</b><span>脚跟先着地、膝盖保持微弯,增稳只能救一半,腿能救另一半。</span></span></div>
+  <div class="tip"><span class="tip-n">05</span><span class="tip-b"><b>声音比画面重要</b><span>风大的时候把相机移到身体的背风侧,或者干脆靠近一点说。画面糊了能忍,声音糊了没人看得下去。</span></span></div>
+  <div class="tip"><span class="tip-n">06</span><span class="tip-b"><b>当天就导进手机</b><span>素材一旦过夜,大概率永远不会被剪。</span></span></div>
+</div>
+
+<div class="sec"><h2>出门前三十秒</h2><i></i></div>
+
+<div class="check">
+  <label><input type="checkbox"><span>相机和手柄都充满电</span></label>
+  <label><input type="checkbox"><span>卡里清空了 / 换了张空卡</span></label>
+  <label><input type="checkbox"><span>镜头擦一下(指纹在逆光下全是雾)</span></label>
+  <label><input type="checkbox"><span>参数按今天的场景先设好,别到现场翻菜单</span></label>
+  <label><input type="checkbox"><span>手柄不防水 —— 下雨下雪就换回裸机</span></label>
+</div>
+
+<footer>
+  OSMO ACTION 5 PRO · 参数据 DJI 官方规格<br>
+  更新于 2026.08 · 参数变了就改这一页
+</footer>
+
+</body>
+</html>
