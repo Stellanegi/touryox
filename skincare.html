@@ -3,224 +3,294 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-title" content="护肤排班">
 <title>护肤排班表</title>
 <style>
   :root{
     --paper:#FAF8F3; --card:#FFFFFF; --ink:#24211B; --mut:#8C8474;
     --line:#E3DCCE; --tan:#C9BFAE; --fill:#F3EFE6;
-    --va:#A65E1E; --acid:#3E6B4F; --rest:#56779A; --mask:#B8323F;
+    --dev:#5E4F8C; --va:#A65E1E; --acid:#3E6B4F; --rest:#56779A; --prep:#8C8474; --mask:#B8323F;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
     background:var(--paper); color:var(--ink);
-    font-family:-apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
     font-size:15px; line-height:1.55; padding:20px 14px 48px;
+    -webkit-text-size-adjust:100%;
   }
   .wrap{max-width:560px;margin:0 auto;}
 
   /* ---------- header ---------- */
-  .eyebrow{
-    font-size:11px;letter-spacing:.22em;color:var(--mut);
-    text-transform:uppercase;margin-bottom:6px;
-  }
+  header{padding:4px 2px 16px;border-bottom:2px solid var(--ink);margin-bottom:16px;}
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--mut);text-transform:uppercase;margin-bottom:6px;}
   h1{font-size:26px;font-weight:700;letter-spacing:.02em;}
   .sub{color:var(--mut);font-size:13px;margin-top:4px;}
-  header{padding:4px 2px 18px;border-bottom:2px solid var(--ink);margin-bottom:18px;}
 
   /* ---------- section label ---------- */
-  .sec{
-    display:flex;align-items:baseline;gap:8px;
-    margin:26px 2px 10px;
-  }
+  .sec{display:flex;align-items:baseline;gap:8px;margin:24px 2px 10px;}
   .sec b{font-size:17px;font-weight:700;}
   .sec span{font-size:11px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase;}
 
   /* ---------- cards ---------- */
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:12px;
-    padding:14px 14px 12px;margin-bottom:10px;
-  }
-  .card.today{border:2px solid var(--ink);box-shadow:0 2px 0 var(--tan);}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;margin-bottom:10px;}
+  .card.now{border:2px solid var(--ink);box-shadow:0 2px 0 var(--tan);}
+  .card.tonight{border-color:var(--ink);}
 
-  .rowhead{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
-  .day{font-weight:700;font-size:16px;}
-  .tag{
-    font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;
-    color:#fff;letter-spacing:.05em;
+  /* ---------- start date ---------- */
+  .startbox{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;}
+  .startbox label{font-weight:700;font-size:14px;}
+  .startbox input{
+    font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--tan);border-radius:8px;
+    background:var(--fill);color:var(--ink);
   }
-  .tag.va{background:var(--va);} .tag.acid{background:var(--acid);}
-  .tag.rest{background:var(--rest);} .tag.mask{background:var(--mask);}
-  .chip{
-    display:none;font-size:11px;font-weight:700;letter-spacing:.08em;
-    border:1.5px solid var(--ink);border-radius:999px;padding:1px 8px;margin-left:auto;
-  }
-  .today .chip{display:inline-block;}
+  .hint{font-size:12px;color:var(--mut);width:100%;}
+
+  /* ---------- tags ---------- */
+  .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;color:#fff;letter-spacing:.05em;white-space:nowrap;}
+  .tag.dev{background:var(--dev);} .tag.va{background:var(--va);} .tag.acid{background:var(--acid);}
+  .tag.rest{background:var(--rest);} .tag.prep{background:var(--prep);}
+
+  /* ---------- today ---------- */
+  .phase{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .phase strong{font-size:19px;}
+  .count{font-size:13px;color:var(--mut);margin-top:4px;}
+  h3{font-size:12px;letter-spacing:.12em;color:var(--mut);margin:14px 0 7px;font-weight:600;}
 
   /* ---------- step chain ---------- */
-  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:5px 4px;}
-  .step{
-    background:var(--fill);border-radius:999px;padding:3px 10px;
-    font-size:13.5px;white-space:nowrap;
-  }
-  .step.wait{background:none;border:1.5px dashed var(--tan);color:var(--mut);}
-  .step.key{background:var(--ink);color:#fff;}
-  .step small{display:block;font-size:10px;font-weight:400;letter-spacing:.02em;opacity:.62;line-height:1.3;margin-top:1px;}
-  .step.key small{opacity:.78;}
-  .arw{color:var(--tan);font-size:12px;}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;}
+  .step{display:inline-block;background:var(--fill);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:13.5px;line-height:1.35;}
+  .step small{display:block;font-size:10px;font-weight:400;opacity:.62;line-height:1.3;margin-top:1px;}
+  .step.dev{background:var(--dev);border-color:var(--dev);color:#fff;font-weight:600;}
+  .step.va{background:var(--va);border-color:var(--va);color:#fff;font-weight:600;}
+  .step.acid{background:var(--acid);border-color:var(--acid);color:#fff;font-weight:600;}
+  .step.mask{background:#fff;border-color:var(--mask);color:var(--mask);font-weight:600;}
+  .step.dev small,.step.va small,.step.acid small{opacity:.8;}
+  .arr{color:var(--tan);font-size:12px;}
   .note{font-size:12.5px;color:var(--mut);margin-top:8px;}
 
-  /* ---------- rules / queue ---------- */
-  ul.rules{list-style:none;}
-  ul.rules li{
-    padding:7px 0 7px 18px;position:relative;font-size:14px;
-    border-bottom:1px dashed var(--line);
-  }
-  ul.rules li:last-child{border-bottom:none;}
-  ul.rules li::before{
-    content:"◆";position:absolute;left:0;top:8px;font-size:9px;color:var(--tan);
-  }
-  table.q{width:100%;border-collapse:collapse;font-size:13.5px;}
-  table.q td{padding:7px 4px;border-bottom:1px dashed var(--line);vertical-align:top;}
-  table.q tr:last-child td{border-bottom:none;}
-  table.q td:first-child{font-weight:600;white-space:nowrap;width:88px;}
-  table.q td:last-child{color:#4A463D;}
+  /* ---------- 8-week timeline ---------- */
+  .timeline{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
+  .wk{height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;opacity:.42;}
+  .wk.dev{background:var(--dev);} .wk.act{background:var(--va);} .wk.prep{background:var(--prep);}
+  .wk.cur{opacity:1;box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink);}
+  .tlabels{display:grid;grid-template-columns:4fr 3fr 1fr;gap:4px;margin-top:8px;font-size:11px;color:var(--mut);text-align:center;}
 
-  footer{margin-top:26px;text-align:center;color:var(--mut);font-size:12px;letter-spacing:.06em;}
+  /* ---------- next 7 nights ---------- */
+  .day{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .day b{font-size:15px;}
+  .day .date{font-size:12px;color:var(--mut);}
+
+  /* ---------- rules & legend ---------- */
+  .rules{padding-left:20px;}
+  .rules li{margin-bottom:6px;font-size:14px;}
+  .rules li:last-child{margin-bottom:0;}
+  .legend{display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:13.5px;}
+  .legend dt{color:var(--mut);white-space:nowrap;}
+  footer{margin-top:24px;font-size:11.5px;color:var(--mut);text-align:center;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Weekly Skincare Regimen</div>
+    <div class="eyebrow">Skincare · 8-week cycle</div>
     <h1>护肤排班表</h1>
-    <div class="sub">油皮 · 匀肤色 / 缩毛孔 / 祛油光 · 照做即可,不用动脑</div>
+    <p class="sub">仪器月 4 周 ⇄ 休息月 4 周 · 打开自动显示今晚做什么</p>
   </header>
 
-  <!-- ============ AM ============ -->
-  <div class="sec"><b>早上</b><span>every morning · 每天固定</span></div>
+  <div class="card startbox">
+    <label for="start">仪器月第一天</label>
+    <input type="date" id="start">
+    <p class="hint">最近一周用过 A醇 或果酸，就往后推一周。改了会自动记住。</p>
+  </div>
+
+  <div class="sec"><b>今天</b><span>Today</span></div>
+  <div class="card now" id="now"></div>
+
+  <div class="sec"><b>8 周循环</b><span>Cycle</span></div>
   <div class="card">
-    <div class="chain">
-      <span class="step">CeraVe绿盖洁面 / 清水</span><span class="arw">→</span>
-      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
-      <span class="step">烟酰胺<small>Niacinamide 10% + Zinc 1%</small></span><span class="arw">→</span>
-      <span class="step">CeraVe控油凝露</span><span class="arw">→</span>
-      <span class="step key">Biore防晒</span>
-    </div>
-    <div class="note">防晒是全套的胜负手,出门必涂;整天宅家/阴天可用CeraVe SPF30那支顶替。</div>
+    <div class="timeline" id="tl"></div>
+    <div class="tlabels"><span>仪器月</span><span>休息月</span><span>准备</span></div>
   </div>
 
-  <!-- ============ PM ============ -->
-  <div class="sec"><b>晚上</b><span>by weekday · 按周轮换</span></div>
+  <div class="sec"><b>接下来 7 晚</b><span>Next 7 nights</span></div>
+  <div id="week"></div>
 
-  <div class="card" id="mon">
-    <div class="rowhead"><span class="day">周一</span><span class="tag va">维A夜</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step wait">擦干等10分钟</span><span class="arw">→</span>
-      <span class="step key">视黄醛棉片</span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-    <div class="note">棉片用完后,这一步换成 TO A醇(Retinol 1% in Squalane)3–4滴。</div>
-  </div>
-
-  <div class="card" id="tue">
-    <div class="rowhead"><span class="day">周二</span><span class="tag rest">泥膜 · 休息</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step key">可复美泥膜 10–15分钟洗掉</span><span class="arw">→</span>
-      <span class="step">茶树水</span><span class="arw">→</span>
-      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-  </div>
-
-  <div class="card" id="wed">
-    <div class="rowhead"><span class="day">周三</span><span class="tag acid">果酸夜</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step key">果酸水<small>Glycolic Acid 7% Toner</small></span><span class="arw">→</span>
-      <span class="step wait">等5分钟</span><span class="arw">→</span>
-      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-  </div>
-
-  <div class="card" id="thu">
-    <div class="rowhead"><span class="day">周四</span><span class="tag va">维A夜</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step wait">擦干等10分钟</span><span class="arw">→</span>
-      <span class="step key">视黄醛棉片</span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-    <div class="note">棉片用完后,这一步换成 TO A醇(Retinol 1% in Squalane)3–4滴。</div>
-  </div>
-
-  <div class="card" id="fri">
-    <div class="rowhead"><span class="day">周五</span><span class="tag rest">休息夜</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step">茶树水</span><span class="arw">→</span>
-      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-  </div>
-
-  <div class="card" id="sat">
-    <div class="rowhead"><span class="day">周六</span><span class="tag acid">果酸夜</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step key">果酸水<small>Glycolic Acid 7% Toner</small></span><span class="arw">→</span>
-      <span class="step wait">等5分钟</span><span class="arw">→</span>
-      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-  </div>
-
-  <div class="card" id="sun">
-    <div class="rowhead"><span class="day">周日</span><span class="tag mask">面膜 · 休息</span><span class="chip">今晚</span></div>
-    <div class="chain">
-      <span class="step">Anua鱼腥草洁面</span><span class="arw">→</span>
-      <span class="step key">SK-II面膜 15分钟</span><span class="arw">→</span>
-      <span class="step">熊果苷<small>Alpha Arbutin 2% + HA</small></span><span class="arw">→</span>
-      <span class="step">米脂乳<small>Rice Lipids + Ectoin</small></span>
-    </div>
-  </div>
-
-  <!-- ============ rules ============ -->
-  <div class="sec"><b>铁律</b><span>rules · 别破例</span></div>
+  <div class="sec"><b>规矩</b><span>Rules</span></div>
   <div class="card">
-    <ul class="rules">
-      <li>一晚只上一种猛药:维A和果酸永不同晚,<b>棉片=维A类</b>,和A醇也不能同晚。</li>
-      <li>茶树水只排在休息/泥膜夜,不跟酸、维A叠加。</li>
-      <li>爆皮泛红:当晚停猛药,<b>理肤泉B5厚涂</b>,恢复了再回到课表。头2–4周轻微爆痘脱皮是维A正常反应,不用慌。</li>
-      <li>Bio-Oil只擦身体旧疤和肘膝,<b>不上脸</b>(油痘皮容易闷痘)。</li>
-    </ul>
+    <ol class="rules">
+      <li>仪器月：A醇、果酸、视黄醛棉片都不用。</li>
+      <li>准备周（第 8 周）：停 A醇、果酸，给下一轮仪器月让路。</li>
+      <li>脸红或刺痛的那晚：只洗脸 + B5，仪器、A醇、果酸都跳过。</li>
+      <li>打完出现一格格小褐点，几天内会退；起水泡或一直不退就停用，问医生。</li>
+      <li>化了粉底：先卸妆，再洗脸。</li>
+      <li>防晒天天涂，冬天也不例外。</li>
+      <li>仪器放久了先充满电；隔了很久再用，先开最低档在小块皮肤试 30 分钟。</li>
+    </ol>
   </div>
 
-  <!-- ============ queue ============ -->
-  <div class="sec"><b>库存消耗</b><span>queue · 先用谁</span></div>
+  <div class="sec"><b>用品分工</b><span>Who does what</span></div>
   <div class="card">
-    <table class="q">
-      <tr><td>维A类</td><td>先用完视黄醛棉片(开封易干)→ 再开TO A醇(Retinol 1% in Squalane),开封后6个月内用完</td></tr>
-      <tr><td>泥膜</td><td>可复美10个 → Fan Beauty 2桶,每周二1个,约3个月清完</td></tr>
-      <tr><td>SK-II</td><td>9片,每周日1片,约2个月清完</td></tr>
-      <tr><td>洁面</td><td>早CeraVe绿盖 / 晚Anua,两支同时消耗</td></tr>
-      <tr><td>防晒</td><td>出门Biore;CeraVe SPF30降级为宅家阴天用</td></tr>
-      <tr><td>寿命</td><td>熊果苷约2个月 · 烟酰胺2–3个月 · 米脂乳3–4个月 · 果酸水最耐用,能撑大半年</td></tr>
-    </table>
+    <dl class="legend">
+      <dt>温和洗</dt><dd>Curél：早上 + 仪器月晚上（CeraVe 洗面奶先用完）</dd>
+      <dt>晚上洗</dt><dd>Anua 鱼腥草：休息月、准备周</dd>
+      <dt>保湿</dt><dd>米脂乳；泛红急救用理肤泉 B5</dd>
+      <dt>防晒</dt><dd>出门 Biore 肉色，宅家可用 CeraVe SPF30</dd>
+      <dt>维A</dt><dd>视黄醛棉片没用完先用棉片，再开 TO A醇</dd>
+      <dt>仪器后</dt><dd>神仙水；周二、周五加修复面膜</dd>
+      <dt>其他面膜</dt><dd>SK-II 片膜、泥膜：休息月的休息夜随意敷</dd>
+    </dl>
   </div>
 
-  <footer>两周后看皮肤反应 · 稳定的话维A加到一周3次</footer>
+  <footer>按“四周开、四周停”排 · 说明书写的频率不一样就再改 · 2026.11 更新</footer>
 </div>
 
 <script>
-  (function(){
-    var map={1:'mon',2:'tue',3:'wed',4:'thu',5:'fri',6:'sat',0:'sun'};
-    var el=document.getElementById(map[new Date().getDay()]);
-    if(el){el.classList.add('today');}
-  })();
+/*LOGIC-START*/
+var CYCLE = 56, DEVICE_DAYS = 28, ACTIVE_END = 49;
+var WD = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+function parseYMD(s) {
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+  if (!m) return null;
+  var d = new Date(+m[1], +m[2] - 1, +m[3]);
+  return d.getMonth() === +m[2] - 1 ? d : null;
+}
+function midnight(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+function dayDiff(a, b) { return Math.round((midnight(a) - midnight(b)) / 86400000); }
+function md(d) { return (d.getMonth() + 1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）'; }
+
+function phaseOf(date, start) {
+  var d = dayDiff(date, start);
+  if (d < 0) return { key: 'pre', daysToNext: -d };
+  var c = d % CYCLE;
+  var ph = { round: Math.floor(d / CYCLE) + 1, week: Math.floor(c / 7) + 1, day: c + 1 };
+  if (c < DEVICE_DAYS) { ph.key = 'device'; ph.daysToNext = DEVICE_DAYS - c; }
+  else if (c < ACTIVE_END) { ph.key = 'active'; ph.daysToNext = ACTIVE_END - c; }
+  else { ph.key = 'prep'; ph.daysToNext = CYCLE - c; }
+  return ph;
+}
+
+var P = {
+  curel:  { t: 'Curél 洗脸' },
+  anua:   { t: 'Anua 洗脸' },
+  dry:    { t: '擦干等 10 分钟' },
+  device: { t: '仪器', s: 'iluminage 耳光机', k: 'dev' },
+  fte:    { t: '神仙水' },
+  mask:   { t: '修复面膜', k: 'mask' },
+  rice:   { t: '米脂乳', s: 'Rice Lipids + Ectoin' },
+  riceB5: { t: '米脂乳', s: '泛红就换 B5' },
+  ret:    { t: 'A醇 3–4 滴', s: 'Retinol 1% in Squalane', k: 'va' },
+  gly:    { t: '果酸水', s: 'Glycolic Acid 7% Toner', k: 'acid' },
+  wait:   { t: '等几分钟' },
+  arb:    { t: '熊果苷', s: 'Alpha Arbutin 2% + HA' },
+  nia:    { t: '烟酰胺', s: 'Niacinamide 10% + Zinc 1%' },
+  spf:    { t: '防晒', s: '出门 Biore · 宅家可用 CeraVe' },
+  amWash: { t: 'Curél 或清水' }
+};
+var MORNING = [P.amWash, P.arb, P.nia, P.rice, P.spf];
+
+function nightPlan(date, start) {
+  var ph = phaseOf(date, start), wd = date.getDay();
+  if (ph.key === 'device') {
+    var maskNight = (wd === 2 || wd === 5);
+    var steps = [P.curel, P.device, P.fte];
+    if (maskNight) steps.push(P.mask);
+    steps.push(P.riceB5);
+    return { ph: ph, tag: '仪器', cls: 'dev', steps: steps,
+      note: maskNight ? '今晚打完敷修复面膜，敷完再上保湿。' : '脸红或刺痛就跳过仪器，只洗脸 + B5。' };
+  }
+  if (ph.key === 'active') {
+    if (wd === 1 || wd === 4) return { ph: ph, tag: 'A醇', cls: 'va', steps: [P.anua, P.dry, P.ret, P.rice],
+      note: '刚恢复 A醇 的头几周可能冒痘、脱皮，属正常；刺痛泛红就停一晚。' };
+    if (wd === 3 || wd === 6) return { ph: ph, tag: '果酸', cls: 'acid', steps: [P.anua, P.gly, P.wait, P.arb, P.rice],
+      note: '果酸和 A醇 永远不同晚。' };
+    return { ph: ph, tag: '休息', cls: 'rest', steps: [P.anua, P.fte, P.arb, P.rice],
+      note: '休息夜只做保湿，想敷 SK-II 片膜或泥膜就今晚。' };
+  }
+  return { ph: ph, tag: '准备', cls: 'prep', steps: [P.anua, P.fte, P.arb, P.rice],
+    note: ph.key === 'prep' ? '准备周：停 A醇、果酸，给下一轮仪器月让路。' : '仪器月还没开始：先停 A醇、果酸，把仪器充满电。' };
+}
+/*LOGIC-END*/
+
+var KEY = 'skincareDeviceStart', DEFAULT_START = '2026-11-23';
+
+function readStart() {
+  var h = (location.hash || '').slice(1);
+  if (parseYMD(h)) return h;
+  try { var v = localStorage.getItem(KEY); if (parseYMD(v)) return v; } catch (e) {}
+  return DEFAULT_START;
+}
+function saveStart(v) {
+  try { localStorage.setItem(KEY, v); } catch (e) {}
+  try { history.replaceState(null, '', '#' + v); } catch (e) {}
+}
+
+function pill(p) {
+  return '<span class="step' + (p.k ? ' ' + p.k : '') + '">' + p.t + (p.s ? '<small>' + p.s + '</small>' : '') + '</span>';
+}
+function chain(list) { return list.map(pill).join('<span class="arr">→</span>'); }
+
+function phaseTitle(ph) {
+  if (ph.key === 'device') return '仪器月 · 第 ' + ph.week + ' 周';
+  if (ph.key === 'active') return '休息月 · 第 ' + (ph.week - 4) + ' 周';
+  if (ph.key === 'prep') return '休息月 · 第 4 周（准备周）';
+  return '仪器月还没开始';
+}
+function countdown(ph, today) {
+  var next = md(addDays(today, ph.daysToNext));
+  var lead = '还有 ' + ph.daysToNext + ' 天 · ';
+  if (ph.key === 'device') return lead + next + '进入休息月';
+  if (ph.key === 'active') return lead + next + '进入准备周';
+  if (ph.key === 'prep') return lead + next + '开始第 ' + (ph.round + 1) + ' 轮仪器月';
+  return lead + next + '开始仪器月';
+}
+function effectiveToday() {
+  var n = new Date(), early = n.getHours() < 5, d = midnight(n);
+  return { date: early ? addDays(d, -1) : d, early: early };
+}
+
+function render() {
+  var start = parseYMD(document.getElementById('start').value) || parseYMD(DEFAULT_START);
+  var t = effectiveToday(), today = t.date, plan = nightPlan(today, start), ph = plan.ph;
+
+  var h = '<div class="phase"><span class="tag ' + plan.cls + '">' + plan.tag + '</span><strong>' + phaseTitle(ph) + '</strong></div>';
+  h += '<div class="count">' + (ph.key !== 'pre' ? '第 ' + ph.round + ' 轮 · 第 ' + ph.day + ' / 56 天<br>' : '') + countdown(ph, today) + '</div>';
+  h += '<h3>今晚 · ' + md(today) + (t.early ? ' · 凌晨 5 点前算前一晚' : '') + '</h3>';
+  h += '<div class="chain">' + chain(plan.steps) + '</div><p class="note">' + plan.note + '</p>';
+  h += '<h3>早上 · 每天一样</h3><div class="chain">' + chain(MORNING) + '</div>';
+  document.getElementById('now').innerHTML = h;
+
+  var tl = '';
+  for (var w = 1; w <= 8; w++) {
+    var c = w <= 4 ? 'dev' : (w <= 7 ? 'act' : 'prep');
+    tl += '<div class="wk ' + c + (ph.key !== 'pre' && ph.week === w ? ' cur' : '') + '">W' + w + '</div>';
+  }
+  document.getElementById('tl').innerHTML = tl;
+
+  var wk = '';
+  for (var i = 0; i < 7; i++) {
+    var day = addDays(today, i), p = nightPlan(day, start);
+    var label = i === 0 ? '今晚' : (i === 1 ? '明晚' : '');
+    wk += '<div class="card' + (i === 0 ? ' tonight' : '') + '"><div class="day"><b>' + WD[day.getDay()] + '</b>' +
+      '<span class="date">' + (day.getMonth() + 1) + '/' + day.getDate() + '</span>' +
+      '<span class="tag ' + p.cls + '">' + p.tag + '</span>' +
+      (label ? '<span class="date">' + label + '</span>' : '') +
+      '</div><div class="chain">' + chain(p.steps) + '</div></div>';
+  }
+  document.getElementById('week').innerHTML = wk;
+}
+
+var input = document.getElementById('start');
+input.value = readStart();
+if (location.hash) saveStart(input.value);
+input.addEventListener('change', function () {
+  if (parseYMD(input.value)) saveStart(input.value);
+  render();
+});
+document.addEventListener('visibilitychange', function () { if (!document.hidden) render(); });
+render();
 </script>
 </body>
 </html>
